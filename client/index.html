@@ -7,8 +7,14 @@
     <title>Document</title>
 </head>
 <body>
+    <button id="UP">UP</button>
     <script>
-        var websocket = new WebSocket('ws://localhost:8080');
+        const websocket = new WebSocket('ws://localhost:8080');
+        const upBtn = document.getElementById("UP");
+
+        upBtn.onclick = (e) => {
+            websocket.send("Yeet");
+        }
     </script>
 </body>
 </html>

@@ -11,6 +11,6 @@ wss.on('request', (request) =>{
     console.log('Client conected');
 
     socket.on('message', (message) => {
-        var data = JSON.parse(message.utf8Data);
+        socket.send('up');
     }); 
 })
