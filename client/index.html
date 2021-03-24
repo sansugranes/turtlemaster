@@ -13,8 +13,23 @@
         const upBtn = document.getElementById("UP");
 
         upBtn.onclick = (e) => {
-            websocket.send("Yeet");
+            data = {
+                type: 'webClient',
+                message: 'up'
+            }
+            websocket.send(JSON.stringify(data));
         }
+
+        websocket.onmessage = (message) => {
+            // Parsing the message data to a JSON object (originnaly string)
+            var data = JSON.parse(message.data);
+
+            console.log(data);
+            if(data.type == "mapInfos"){
+                console.log(data.message);
+                const file = new Blob();
+            }
+        };
     </script>
 </body>
 </html>
