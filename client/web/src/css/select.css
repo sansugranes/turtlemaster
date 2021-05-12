@@ -1,0 +1,8 @@
+.turtle > p {
+    align-content: center;
+}
+
+.turtle > button {
+    text-align: center;
+    margin: auto;
+}

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Master</title>
+
+    <!-- DEPENDECY -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href=".\..\css\main.css">
+</head>
+
+<body>
+    <div class="main w-screen h-screen flex flex-wrap content-center">
+
+        <div id="titleContainer" class="w-screen">
+            <button
+                class="transition duration-500 px-10 hover:bg-blue-300 pb-4 text-7xl sm:text-9xl m-auto font-normal flex-1 flex justify-center rounded-md text-black items-center"
+                style="border: none; outline: none;"
+                onclick='start("./select.html", "ws://pixsky.ch:8080")'>Start</button>
+        </div>
+
+        <div id="redirectContainer" class="w-screen my-20">
+            <button
+                class="transition duration-500 px-10 hover:bg-blue-300 pb-1 text-xl sm:text-2xl m-auto font-normal flex-1 flex justify-center rounded-md text-black items-center"
+                style="border: none; outline: none;" onclick=''>Utiliser mon propre serveur</button>
+        </div>
+    </div>
+    
+    <script src="..\js\start.js"></script>
+</body>
+
+</html>

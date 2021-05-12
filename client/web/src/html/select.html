@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Master</title>
+
+    <!-- DEPENDECY -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link href=".\..\css\main.css">
+    <link href=".\..\css\select.css">
+    <link href=".\..\css\basic.css">
+
+    <!-- SCRIPTS -->
+</head>
+
+<body>
+    <div class="main w-screen h-screen flex flex-wrap content-center">
+        <div id="redirectContainer" class="w-screen">
+            <p class="text-center text-xl sm:text-2xl antialiased my-auto">Choissisez votre Turtle</p>
+        </div>
+
+        <div id="listContainer" class="grid grid-cols-1 sm:grid-cols-5 w-full px-5 content-center">
+            <!-- ici on met les tutrles -->
+            <div class="transition duration-500 turtle content-center border-2 border-blue-500 rounded-xl m-10 hover:bg-blue-200"
+                onclick="selectTurtle(this)">
+                <p class="text-center my-5 font-medium font-thin">Jimin</p>
+                <img src=".\..\media\turtle.gif" class="m-auto mb-16">
+            </div>
+        </div>
+    </div>
+
+    <script src=".\..\js\select\select.js"></script>
+</body>
+
+</html>

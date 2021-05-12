@@ -1,0 +1,14 @@
+.removeBorder {
+    border: none !important; 
+    outline: none !important;
+}
+
+.removeOutline {
+    outline: none !important;
+}
+
+.square24 {
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0px !important;
+}
