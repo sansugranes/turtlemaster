@@ -1,0 +1,41 @@
+.center {
+    display: block;
+    margin: auto;
+    text-align: center;
+}
+
+.flxBoxColumn {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: stretch;
+}
+
+.flxBoxRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: stretch;
+}
+
+button:focus {
+    outline: none;
+}
+
+button {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    border: 3px solid green;
+}

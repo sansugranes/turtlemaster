@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Main game view">
     <title>Document</title>
 
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://unpkg.com/three@0.87.1/build/three.js"></script>
     <script src="https://unpkg.com/three@0.87.1/examples/js/controls/OrbitControls.js"></script>
     <script src="https://unpkg.com/three@0.87.1/examples/js/loaders/GLTFLoader.js"></script>
     <script src="./../js/turtle.js"></script>
-    <script src="./../js/modules/main.js"></script>
-    <script src="./../js/modules/eventDispatcher.js"></script>
+    <script src="./../js/main.js"></script>
+    <script src="./../js/eventDispatcher.js"></script>
     <script src="./../js/database.js"></script>
     <script src="./../js/lib/utf8.js"></script>
 </head>
@@ -34,14 +34,15 @@
     </div>
 
     <script>
+        // Bridge to user a function from a module
         var clearGlobal;
     </script>
 
     <script type="module">
+        // Global scope vars
+        let camera, scene, renderer, turtleCube, turtleInfos;
 
-        let camera, scene, renderer, turtleCube, turtleLineSegments, turtleInfos;
-
-        //renderer
+        // Renderer
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
@@ -50,12 +51,15 @@
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.z = 100;
 
+        // Init function to start the rendering engine
         init();
         animate();
         addWsListener(handleViewMessage);
 
+        // ClearGlobal function, clear all the blocks in the scene
+        // and re init the scene
         clearGlobal = function clear() {
-            console.log("ASSdZTAFSDHGASDUZTAFSDZTFASDZTFASDZTFASDZTFASDZTFASDZTF");
+
             while (scene.children.length > 0) {
                 scene.remove(scene.children[0]);
             }
@@ -63,80 +67,77 @@
             init();
         }
 
+        // Init function, create the scene with the block from the database
+        // and create the trutle
         function init() {
 
-
-            var storageObj = JSON.parse(localStorage.getItem('storageObj'));
+            // Get the turtle infos location from database
             turtleInfos = storageObj.turtleInfos;
 
-
+            // Create the orbit controller
             const controls = new THREE.OrbitControls(camera, renderer.domElement);
-
+            
+            // Scene
             scene = new THREE.Scene();
             scene.background = new THREE.Color(0xa0a0a0);
 
-            const light = new THREE.AmbientLight(0x404040); // soft white light
-            scene.add(light);
-
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
-            scene.add(directionalLight);
-
             // Turtle
-            var geometry = new THREE.BoxGeometry(1, 1, 1);
+            var geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
             var material = new THREE.MeshToonMaterial({ color: 0xff0000 });
             turtleCube = new THREE.Mesh(geometry, material);
+            // Trutle wire frame
             var lineMaterial = new THREE.LineBasicMaterial({
                 color: 0xffffff,
                 linewidth: 1,
                 linecap: 'round', //ignored by WebGLRenderer
                 linejoin: 'round' //ignored by WebGLRenderer
             });
-
-            turtleLineSegments = new THREE.LineSegments(geometry, lineMaterial);
-
+            var edges = new THREE.EdgesGeometry(geometry);
+            var turtleLineSegments = new THREE.LineSegments(edges, lineMaterial);
             turtleCube.position.set(turtleInfos.position.x, turtleInfos.position.y, turtleInfos.position.z);
 
-            turtleLineSegments.position.set(turtleInfos.position.x, turtleInfos.position.y, turtleInfos.position.z);
+            // Turtle mask
+            var turtleMaskGeom = new THREE.BoxGeometry(0.9, 0.9, 0.1);
+            var turtleMastMat = new THREE.MeshToonMaterial({ color: 0x00ff00 });
+            var turtleMaskCube = new THREE.Mesh(turtleMaskGeom, turtleMastMat);
+            // Turtle mask wire frame
+            var maskEdges = new THREE.EdgesGeometry(turtleMaskGeom);
+            var maskLineSegments = new THREE.LineSegments(maskEdges, lineMaterial);
+            turtleMaskCube.add(maskLineSegments);
 
+            // Adding the mask to the scene as a turtle child
+            turtleCube.add(turtleMaskCube);
+            turtleCube.add(turtleLineSegments);
+
+            // Setting the mask position relative to parent
+            turtleMaskCube.position.set(turtleMaskCube.position.x, turtleMaskCube.position.y, turtleMaskCube.position.z + 0.4);
+
+            // Init turtle mask direction
+            changeTurtleFacing();
+
+            // Adding turtle to scene
             scene.add(turtleCube);
-            scene.add(turtleLineSegments);
 
+            // Map generation
             storageObj.database.forEach(block => {
                 createBlock(block);
             });
 
+            // Other stuff (skybox and lights)
             var skyboxGeometry = new THREE.BoxGeometry(10000, 10000, 10000);
             var skyboxMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
             var skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
-
+            const light = new THREE.AmbientLight(0x404040); // soft white light
+            scene.add(light);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+            scene.add(directionalLight);
             scene.add(skybox);
 
-            const loader = new THREE.GLTFLoader();
-            loader.crossOrigin = true;
-            loader.load('../turtle.glb', function (data) {
-                var object = data.scene;
-                object.position.set(0, -10, -0.75);
-                //     object.rotation.set(Math.PI / -2, 0, 0);
-
-                //     TweenLite.from( object.rotation, 1.3, {
-                //       y: Math.PI * 2,
-                //       ease: 'Power3.easeOut'
-                //     });
-
-                TweenMax.from(object.position, 3, {
-                    y: -8,
-                    yoyo: true,
-                    repeat: -1,
-                    ease: 'Power2.easeInOut'
-                });
-                //object.position.y = - 95;
-                scene.add(object);
-                //, onProgress, onError );
-            });
-
+            // Resizing canevas relative to window size
             window.addEventListener('resize', onWindowResize);
         }
 
+        // Function to resize the canvas relative to the window size
         function onWindowResize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -144,12 +145,14 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
 
+        // Animates the frames
         function animate() {
             requestAnimationFrame(animate);
 
             render();
         }
 
+        // Renders the scene
         function render() {
             renderer.render(scene, camera);
         }
@@ -158,14 +161,18 @@
             createBlock(block);
         }
 
+        // Hangdles socket messages for the view part
         function handleViewMessage(e) {
             var data = JSON.parse(e.data);
 
             switch (data.type) {
+                // Check if the message is what we need
+                // (mapInfos contains all the messages relative to the turtle sending turtle and block position to the client)
                 case "mapInfos":
                     var infos = data.message;
+                    // Checks if the mesage contains block informations
                     if (infos.blockInfo != undefined) {
-
+                        // The block infos contains position and name of the blocks
                         if (infos.blockInfo != "No block to inspect") {
 
                             var block = {
@@ -176,8 +183,9 @@
                             addBlockToView(block);
                         }
                     }
+                    // Checks if the mesage contains turtle informations
                     else if (infos.position != undefined) {
-
+                        // The turtle infos contains position of the turtle and facing direction 
                         turtle.updateTurtle(infos);
 
                         turtleInfos = turtle.getTurtle();
@@ -188,14 +196,14 @@
             }
         }
 
+        // Chrates one block
         function createBlock(block) {
+            // Cube
             var geometry = new THREE.BoxBufferGeometry(1, 1, 1);
-
-
             var cubeHue = hexToHSL(stringToHex(block.name));
-            console.log(cubeHue);
             var material = new THREE.MeshToonMaterial({ color: new THREE.Color('hsl(' + cubeHue['h'] * 360 + ', 100%, 30%)') });
             var cube = new THREE.Mesh(geometry, material);
+            // Cube wire frame
             var lineMaterial = new THREE.LineBasicMaterial({
                 color: 0x000000,
                 linewidth: 1,
@@ -205,11 +213,10 @@
             var edges = new THREE.EdgesGeometry(geometry);
             var lineSegment = new THREE.LineSegments(edges, lineMaterial);
 
-
+            // Adding the cube to the scene
             cube.position.set(block.position.x, block.position.y, block.position.z);
-            lineSegment.position.set(block.position.x, block.position.y, block.position.z);
+            cube.add(lineSegment);
             scene.add(cube);
-            scene.add(lineSegment);
         }
 
         function stringToHex(str) {
@@ -228,9 +235,32 @@
             return str;
         }
 
+        function changeTurtleFacing() {
+            switch (turtleInfos.facing) {
+                // north
+                case 1:
+                    turtleCube.rotation.y = Math.PI;
+                    break;
+                // sud    
+                case 2:
+                    turtleCube.rotation.y = 0;
+                    break;
+                // east    
+                case 3:
+                    turtleCube.rotation.y = Math.PI / 2;
+                    break;
+                // WEST
+                case 4:
+                    turtleCube.rotation.y = Math.PI / 2 + Math.PI;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         function drawTurtle() {
             turtleCube.position.set(turtleInfos.position.x, turtleInfos.position.y, turtleInfos.position.z);
-            turtleLineSegments.position.set(turtleInfos.position.x, turtleInfos.position.y, turtleInfos.position.z);
+            changeTurtleFacing();
         }
 
         document.addEventListener("keydown", (e) => {
@@ -260,7 +290,6 @@
                     break;
 
                 default:
-                    console.log(e.key);
                     break;
             }
         });

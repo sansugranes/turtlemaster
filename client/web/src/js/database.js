@@ -1,4 +1,4 @@
-var storageObj = JSON.parse(localStorage.getItem('storageObj'));
+let storageObj = JSON.parse(localStorage.getItem('storageObj'));
 
 function initDatabase() {
     storageObj = {};

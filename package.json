@@ -1,0 +1,25 @@
+{
+  "name": "p_turtlemaster",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanSugranes/turtlemaster.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SanSugranes/turtlemaster/issues"
+  },
+  "homepage": "https://github.com/SanSugranes/turtlemaster#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
