@@ -1,9 +1,11 @@
 --[[------------------------------------------------
-|   Authors : Santiago Sugrañes & Mathias Rogey
+|   Authors : Santiago Sugrañes
 |
-|   Description : Server sided, used to redirect
-|           user to the web folder so it can serve
-|           the PWA.
+|   Description : Turtle client lua code to
+|           to upload on pastebit so you can
+|           use it on the turtle.
+|           Some of the JSON Library has been taken
+|           from Ottomated code.
 ------------------------------------------------]]--
 
 -- BEGIN JSON LIBRARY --
