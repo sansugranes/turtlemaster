@@ -1,3 +1,12 @@
+/**************************************************\
+|   Authors : Santiago Sugrañes
+|
+|   Description : WebSocket server that communicates
+|           with the turtles and the client-side
+|           website. Uses websocket server and
+|           http packages.
+\**************************************************/
+
 const server = require('websocket').server;
 const http = require('http');
 

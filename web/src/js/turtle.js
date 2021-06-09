@@ -1,17 +1,25 @@
+/**************************************************\
+|   Authors : Santiago Sugrañes & Mathias Rogey
+|
+|   Description : Turtle class, used to handle
+|            everithing that has to do with the
+|            in-game turtle.
+\**************************************************/
+
 const MoveDirection = {
-    FRONT : 0,
-    BACK : 1,
-    RIGHT : 2,
-    LEFT : 3,
-    UP : 4,
-    DOWN : 5
+    FRONT: 0,
+    BACK: 1,
+    RIGHT: 2,
+    LEFT: 3,
+    UP: 4,
+    DOWN: 5
 };
 
 const Cartesian = {
-    NORTH : 0,
-    SOUTH : 1,
-    EST : 2,
-    WEST : 3
+    NORTH: 0,
+    SOUTH: 1,
+    EST: 2,
+    WEST: 3
 };
 
 const toTurtle = "webClient";
@@ -20,7 +28,7 @@ class Turtle {
 
     constructor(name) {
         this._name = name;
-        this._data = {type: "", message: ""};
+        this._data = { type: "", message: "" };
         this._position = null;
         this._facing = null;
     }
@@ -35,7 +43,7 @@ class Turtle {
     }
 
     getTurtle() {
-        return {position: this._position, facing: this._facing}
+        return { position: this._position, facing: this._facing }
     }
 
     move(direction) {
@@ -58,12 +66,12 @@ class Turtle {
                 break;
             case MoveDirection.DOWN:
                 ws.send(this.#buildMessage(toTurtle, 'down'));
-                break;           
+                break;
             default:
                 throw new Error("This isn't supposed to happend");
                 break;
 
-            console.log('sended');
+                console.log('sended');
 
         }
     }

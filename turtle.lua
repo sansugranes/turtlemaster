@@ -1,3 +1,11 @@
+--[[------------------------------------------------
+|   Authors : Santiago Sugrañes & Mathias Rogey
+|
+|   Description : Server sided, used to redirect
+|           user to the web folder so it can serve
+|           the PWA.
+------------------------------------------------]]--
+
 -- BEGIN JSON LIBRARY --
 local type = type
 local next = next

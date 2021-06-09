@@ -1,3 +1,11 @@
+/**************************************************\
+|   Authors : Santiago Sugrañes & Mathias Rogey
+|
+|   Description : Used to create a local "database"
+|           that temporary stores a JSON map object
+|           with the turtle and worls informations.
+\**************************************************/
+
 var storageObj = JSON.parse(localStorage.getItem('storageObj'));
 
 function initDatabase() {
